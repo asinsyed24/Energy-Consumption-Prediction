@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.idea/
+*.pyc
+
+mlruns/
+mlflow.db
+
+data/processed/
+models/
+
+.DS_Store
