@@ -34,78 +34,76 @@ for column in numeric_columns:
 
 
 # -----------------------------
-# 3. Combine Date and Time
+# 3. Create datetime
 # -----------------------------
 df["datetime"] = pd.to_datetime(
     df["Date"] + " " + df["Time"],
     dayfirst=True
 )
 
-# Sort by time
+# Remove rows with missing values
+df = df.dropna(subset=["datetime", "Global_active_power"])
+
+# Sort by datetime
 df = df.sort_values("datetime")
 
-
-# -----------------------------
-# 4. Remove missing values
-# -----------------------------
-df = df.dropna()
-
-print("Shape after removing missing values:", df.shape)
+print("Rows after cleaning:", len(df))
 
 
 # -----------------------------
-# 5. Create time features
+# 4. Set datetime as index
 # -----------------------------
-df["hour"] = df["datetime"].dt.hour
-df["day"] = df["datetime"].dt.day
-df["month"] = df["datetime"].dt.month
-df["day_of_week"] = df["datetime"].dt.dayofweek
-
-# 1 = weekend, 0 = weekday
-df["is_weekend"] = (df["day_of_week"] >= 5).astype(int)
+df = df.set_index("datetime")
 
 
 # -----------------------------
-# 6. Create previous consumption
+# 5. Convert minute data to hourly data
 # -----------------------------
-df["previous_consumption"] = df["Global_active_power"].shift(1)
+hourly = df["Global_active_power"].resample("1h").mean()
 
-# Remove first row because it has no previous value
-df = df.dropna()
+hourly = hourly.dropna()
 
-
-# -----------------------------
-# 7. Select required columns
-# -----------------------------
-final_df = df[
-    [
-        "datetime",
-        "hour",
-        "day",
-        "month",
-        "day_of_week",
-        "is_weekend",
-        "previous_consumption",
-        "Global_active_power"
-    ]
-]
+print("Hourly dataset shape:", hourly.shape)
 
 
 # -----------------------------
-# 8. Create processed directory
+# 6. Create features
+# -----------------------------
+result = pd.DataFrame()
+
+result["hour"] = hourly.index.hour
+result["day"] = hourly.index.day
+result["month"] = hourly.index.month
+result["day_of_week"] = hourly.index.dayofweek
+
+# Weekend = 1, Weekday = 0
+result["is_weekend"] = (
+    result["day_of_week"] >= 5
+).astype(int)
+
+# Previous hour consumption
+result["previous_consumption"] = hourly.shift(1).values
+
+# Target
+result["Global_active_power"] = hourly.values
+
+# Remove first row
+result = result.dropna()
+
+
+# -----------------------------
+# 7. Save processed dataset
 # -----------------------------
 os.makedirs("data/processed", exist_ok=True)
 
-
-# -----------------------------
-# 9. Save processed dataset
-# -----------------------------
 output_file = "data/processed/energy_processed.csv"
 
-final_df.to_csv(output_file, index=False)
+result.to_csv(output_file, index=False)
 
-print("Processed dataset saved to:", output_file)
-print("Final shape:", final_df.shape)
+print("\nProcessed dataset saved to:")
+print(output_file)
+
+print("\nFinal dataset shape:", result.shape)
 
 print("\nFirst 5 rows:")
-print(final_df.head())
+print(result.head())
