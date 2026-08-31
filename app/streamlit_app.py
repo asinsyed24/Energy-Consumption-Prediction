@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 
+API_URL = https://energy-consumption-prediction-3.onrender.com
+
 
 # --------------------------------
 # Page configuration
@@ -88,7 +90,7 @@ if st.button("🔮 Predict Energy Consumption"):
     try:
 
         response = requests.post(
-            "http://127.0.0.1:8000/predict",
+            "https://energy-api-xxxx.onrender.com/predict",
             json=data
         )
 
@@ -131,7 +133,6 @@ try:
     df = pd.read_csv(
         "data/processed/energy_processed.csv"
     )
-
     # Display only the most recent 100 hours
     chart_data = df.tail(100).copy()
 
@@ -148,3 +149,4 @@ except FileNotFoundError:
     st.error(
         "Processed energy dataset not found."
     )
+
