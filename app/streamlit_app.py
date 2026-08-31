@@ -2,7 +2,9 @@ import streamlit as st
 import requests
 import pandas as pd
 
-API_URL = https://energy-consumption-prediction-3.onrender.com
+API_URL = "https://energy-consumption-prediction-3.onrender.com"
+
+
 
 
 # --------------------------------
@@ -90,9 +92,11 @@ if st.button("🔮 Predict Energy Consumption"):
     try:
 
         response = requests.post(
-            "https://energy-api-xxxx.onrender.com/predict",
+            f"{API_URL}/predict",
             json=data
         )
+
+
 
         if response.status_code == 200:
 
