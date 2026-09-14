@@ -1,0 +1,5 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = https://dagshub.com/asinsyed24/Energy-Consumption-Prediction.dvc
+    ssl_verify = true
