@@ -114,10 +114,8 @@ if st.button("🔮 Predict Energy Consumption"):
             )
 
         else:
-
-            st.error(
-                f"API Error: {response.status_code}"
-            )
+            st.error(f"API Error: {response.status_code}")
+            st.write("Response:", response.text)
 
     except requests.exceptions.ConnectionError:
 
