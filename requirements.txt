@@ -5,3 +5,5 @@ joblib
 pandas
 scikit-learn
 streamlit==1.62.0
+mlflow
+evidently

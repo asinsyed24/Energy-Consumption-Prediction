@@ -34,3 +34,21 @@ jobs:
       - name: Test FastAPI application
         run: |
           python -c "from app.api import app; print('FastAPI application loaded successfully')"
+
+      - name: Train ML model
+        run: |
+          python src/train.py
+
+      - name: Check trained model
+        run: |
+          test -f models/energy_model.pkl
+          echo "Model file exists"
+
+      - name: Run data drift monitoring
+        run: |
+          python src/monitoring.py
+
+      - name: Check Evidently report
+        run: |
+          test -f data_drift_report.html
+          echo "Evidently report generated successfully"
