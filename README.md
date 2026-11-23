@@ -88,3 +88,44 @@ The project uses a Random Forest Regressor and integrates MLOps tools for data v
        └─────────────────┘
 
        GitHub Actions → Continuous Integration
+
+## Azure Cloud Deployment
+
+The Energy Consumption Prediction system is deployed on Microsoft Azure using Azure Container Apps.
+
+### Live Application
+
+- **Streamlit Frontend:** https://energy-streamlit-app.politesky-e2ec2cbb.centralindia.azurecontainerapps.io/
+- **FastAPI Backend:** https://energy-api-app.politesky-e2ec2cbb.centralindia.azurecontainerapps.io/
+- **API Documentation:** https://energy-api-app.politesky-e2ec2cbb.centralindia.azurecontainerapps.io/docs
+
+### Deployment Architecture
+
+1. The user enters energy consumption details through the Streamlit interface.
+2. Streamlit sends the input data to the FastAPI backend.
+3. FastAPI loads the trained machine learning model.
+4. The model predicts energy consumption.
+5. The prediction is displayed on the Streamlit dashboard.
+
+### Azure Services Used
+
+- Azure Container Registry (ACR)
+- Azure Container Apps
+- Azure Container Apps Environment
+- Azure Resource Group
+
+### Docker Containers
+
+- `energy-api`: FastAPI prediction service.
+- `energy-streamlit`: Streamlit frontend application.
+
+### Project Features
+
+- Energy consumption prediction
+- Interactive Streamlit dashboard
+- REST API using FastAPI
+- Historical energy consumption visualization
+- Model monitoring using Evidently AI
+- Experiment tracking using MLflow
+- Data versioning using DVC
+- CI using GitHub Actions
